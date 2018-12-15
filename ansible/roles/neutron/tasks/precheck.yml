@@ -25,13 +25,11 @@
     - groups['neutron-dhcp-agent'] | length < 2
       or groups['neutron-l3-agent'] | length < 2
 
-# When MountFlags is set to shared, a signal bit configured on 20th bit of a number
-# We need to check the 20th bit. 2^20 = 1048576. So we are validating against it.
 - name: Checking if 'MountFlags' for docker service is set to 'shared'
   command: systemctl show docker
   register: result
   changed_when: false
-  failed_when: result.stdout.find('MountFlags=1048576') == -1
+  failed_when: result.stdout.find('MountFlags=shared') == -1
   when:
     - (inventory_hostname in groups['neutron-dhcp-agent']
        or inventory_hostname in groups['neutron-l3-agent']
