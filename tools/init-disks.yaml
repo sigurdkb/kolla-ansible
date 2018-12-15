@@ -1,0 +1,55 @@
+---
+- hosts: all
+  remote_user: sigurdkb
+  become: yes
+  strategy: free
+  tasks:
+    - name: Prepare sdb for ceph OSD db 0
+      parted:
+        device: /dev/sdb
+        number: 1
+        part_start: 0%
+        part_end: 33%
+        label: gpt
+        name: KOLLA_CEPH_OSD_BOOTSTRAP_BS_C00_D
+        state: present
+    - name: Prepare sdb for ceph OSD db 1
+      parted:
+        device: /dev/sdb
+        number: 2
+        part_start: 34%
+        part_end: 66%
+        label: gpt
+        name: KOLLA_CEPH_OSD_BOOTSTRAP_BS_C01_D
+        state: present
+    - name: Prepare sdb for ceph OSD db 2
+      parted:
+        device: /dev/sdb
+        number: 3
+        part_start: 67%
+        part_end: 100%
+        label: gpt
+        name: KOLLA_CEPH_OSD_BOOTSTRAP_BS_C02_D
+        state: present
+    - name: Prepare sdc for ceph OSD block
+      parted:
+        device: /dev/sdc
+        number: 1
+        label: gpt
+        name: KOLLA_CEPH_OSD_BOOTSTRAP_BS_C00_B
+        state: present
+    - name: Prepare sdd for ceph OSD block
+      parted:
+        device: /dev/sdd
+        number: 1
+        label: gpt
+        name: KOLLA_CEPH_OSD_BOOTSTRAP_BS_C01_B
+        state: present
+    - name: Prepare sde for ceph OSD block
+      parted:
+        device: /dev/sde
+        number: 1
+        label: gpt
+        name: KOLLA_CEPH_OSD_BOOTSTRAP_BS_C02_B
+        state: present
+
